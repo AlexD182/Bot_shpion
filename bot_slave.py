@@ -2,10 +2,10 @@ from aiogram import Bot, Dispatcher, executor, types
 from aiogram.dispatcher.filters import Text
 #from aiogram.utils.markdown import hbold, hlink
 
-import asyncio
-import aiohttp
+#import asyncio
+#import aiohttp
 import nest_asyncio
-nest_asyncio.apply()
+
 
 from main import collect_data, find_wishes, GetSysytemTime, result_to_msg
 import data_input as di
@@ -57,6 +57,7 @@ async def my_func(message: types.Message):
 
 
 def main():
+    nest_asyncio.apply()
     print(GetSysytemTime(), "   Bot start")
     executor.start_polling(dp, skip_updates = True)
     
