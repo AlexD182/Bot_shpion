@@ -1,8 +1,11 @@
 from aiogram import Bot, Dispatcher, executor, types
 from aiogram.dispatcher.filters import Text
 #from aiogram.utils.markdown import hbold, hlink
-from main import collect_data, find_wishes, GetSysytemTime, result_to_msg
 
+import asyncio
+import aiohttp
+
+from main import collect_data, find_wishes, GetSysytemTime, result_to_msg
 import data_input as di
 
 
