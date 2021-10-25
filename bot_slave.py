@@ -4,7 +4,10 @@ from aiogram.dispatcher.filters import Text
 
 #import asyncio
 #import aiohttp
-import nest_asyncio
+#import nest_asyncio
+
+import asyncio
+asyncio.set_event_loop(asyncio.new_event_loop())
 
 
 from main import collect_data, find_wishes, GetSysytemTime, result_to_msg
@@ -57,7 +60,7 @@ async def my_func(message: types.Message):
 
 
 def main():
-    nest_asyncio.apply()
+    #nest_asyncio.apply()
     print(GetSysytemTime(), "   Bot start")
     executor.start_polling(dp, skip_updates = True)
     
