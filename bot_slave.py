@@ -4,6 +4,8 @@ from aiogram.dispatcher.filters import Text
 
 import asyncio
 import aiohttp
+import nest_asyncio
+nest_asyncio.apply()
 
 from main import collect_data, find_wishes, GetSysytemTime, result_to_msg
 import data_input as di
