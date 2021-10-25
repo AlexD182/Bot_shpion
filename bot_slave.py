@@ -1,7 +1,7 @@
 from aiogram import Bot, Dispatcher, executor, types
 from aiogram.dispatcher.filters import Text
-from aiogram.utils.markdown import hbold, hlink
-from main import collect_data, find_wishes, GetSysytemTime
+#from aiogram.utils.markdown import hbold, hlink
+from main import collect_data, find_wishes, GetSysytemTime, result_to_msg
 
 import data_input as di
 
@@ -25,25 +25,12 @@ async def start(message: types.Message):
 async def get_UP_data(message: types.Message):
     await message.answer("Please waiting...")
 
-    UP_data = collect_data(di.UP_url_parks, di.UP_pagination_count)
-    UP_result = find_wishes(di.UP_wishes, UP_data)
-    
-    
-    if(UP_result):
-        card =''             
-        for el in UP_result:                
-            card = str( el['Info'] + "\n" +
-                        'Size:  ' + str(el['Size']).replace("[", "").replace("]", "").replace("'", "") +"\n" +
-                        'Price:  ' + el['Price'] + "\n") 
+    UP_dataBot = collect_data(di.UP_url_parks, di.UP_pagination_count)
+    UP_resultBot = find_wishes(di.UP_wishes, UP_dataBot)       
+    UP_massengesBot = result_to_msg(UP_resultBot)
 
-            if ("PriceDiscount" in el):
-                card += 'Price Discount:  ' + el["PriceDiscount"] + "🔥🔥🔥" + '\n'
-
-            card += di.UP_url + el['id']
-            await message.answer(card)        
-    else:
-        card = "Not found!"
-        await message.answer(card)
+    for text in UP_massengesBot:
+        await message.answer(text)
 
 
 ###   PING time    
