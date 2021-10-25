@@ -7,6 +7,7 @@ from aiogram.dispatcher.filters import Text
 #import nest_asyncio
 
 import asyncio
+asyncio.set_event_loop(asyncio.new_event_loop())
 
 
 
@@ -61,7 +62,7 @@ async def my_func(message: types.Message):
 
 def main():
     #nest_asyncio.apply()
-    asyncio.set_event_loop(asyncio.new_event_loop())
+    
     print(GetSysytemTime(), "   Bot start")
     executor.start_polling(dp, skip_updates = True)
     
