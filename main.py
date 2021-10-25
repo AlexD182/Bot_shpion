@@ -136,7 +136,7 @@ def report():
 def main():
     print( GetSysytemTime(), "  Server start")
     ####
-    threading.Thread(target=lambda: every(60, report)).start()
+    threading.Thread(target=lambda: every(18000, report)).start()
     bot_slave.main()
     ###
 

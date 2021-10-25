@@ -14,12 +14,10 @@ headers = {
 #         'Price': '1 325',
 #         'PriceDiscount':'500'} 
 
-
+#{'id':'arka-urban-planet-softech-blk','Size':'S'},
 
 UP_url = "https://urbanplanet-streetwear.com"
 UP_url_parks = "https://urbanplanet-streetwear.com/mens-parks-jackets-bombers/c004/page-"
 UP_pagination_count = 2  
-UP_wishes =[
-    {'id':'arka-urban-planet-softech-blk','Size':'S'},
-    {'id':'bomber-long-nvy', 'Size':'XS'}
-    ]
+UP_wishes =[{'id':'bomber-long-nvy', 'Size':'XS'},
+            {'id':'arka-urban-planet-softech-blk','Size':'L'}]
