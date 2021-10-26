@@ -12,7 +12,7 @@ import threading
 import bot_slave
 import data_input as di
 
-STAT = []
+
 
 ##    TOOLS
 #-------------------------------------------------------------------- 
@@ -33,55 +33,72 @@ def find_between( s, first, last ):
 
 
 def get_page_csr(url):
-    _data = {}
+    
+    STAT = []
     s = requests.Session()
     response = s.get(url=url, headers = di.headers)
-    html = BS(response.content, "html.parser")
-    productCard = html.find_all("div", class_="product-card__content")
 
-    for pd in productCard:
-        productName =  pd.find_all("div", class_="product-card__media")[0]        
-        productInfo =  pd.find_all("span", itemprop="name")
-        productSize =  pd.find_all("ul", class_="product-sizes__list")
-        productPrice =  pd.find_all("span", class_="price__value")
+    if(response.ok):
+        print(GetSysytemTime(), " Response ok! ::", url)
+        html = BS(response.content, "html.parser")
+        productCard = html.find_all("div", class_="product-card__content")
 
-        productName = find_between(str(productName),"href=", "><picture").replace(" ",'').replace('"',"")
+        for pd in productCard:
+            productName =  pd.find_all("div", class_="product-card__media")[0]        
+            productInfo =  pd.find_all("span", itemprop="name")
+            productSize =  pd.find_all("ul", class_="product-sizes__list")
+            productPrice =  pd.find_all("span", class_="price__value")
 
-        Size = str(productSize[0].text).split()
+            productName = find_between(str(productName),"href=", "><picture").replace(" ",'').replace('"',"")
 
-        if(False):
-            print("Product name: ", productName)
-            print("INFO:    ", productInfo[0].text)
-            print("Size:    ", Size)
-            print("Price:    ", productPrice[0].text)
+            Size = str(productSize[0].text).split()
+
+            #logging
+            if(False):
+                print("Product name: ", productName)
+                print("INFO:    ", productInfo[0].text)
+                print("Size:    ", Size)
+                print("Price:    ", productPrice[0].text)
+                if ( len(productPrice) > 1):
+                    print("Price disc:    ", productPrice[1].text)
+                print("===============")
+            
+            _data = {}
+            _data["id"] = productName
+            _data["Info"] = productInfo[0].text
+            _data["Size"] = Size
+            _data["Price"] = productPrice[0].text
             if ( len(productPrice) > 1):
-                print("Price disc:    ", productPrice[1].text)
-            print("===============")
-        
-        _data = {}
-        _data["id"] = productName
-        _data["Info"] = productInfo[0].text
-        _data["Size"] = Size
-        _data["Price"] = productPrice[0].text
-        if ( len(productPrice) > 1):
-            _data["PriceDiscount"] = productPrice[1].text
+                _data["PriceDiscount"] = productPrice[1].text
 
-        if _data not in STAT:
-            STAT.append(_data)   
+            if _data not in STAT:
+                STAT.append(_data)  
+        
+        print(GetSysytemTime(), " Found products:", len(STAT))
+        return STAT
     
     #with open("index_csr.html", "w") as file:
     #    file.write(response.text)
+    else:
+        return str(GetSysytemTime()) + " : No response! : " + url + " : Error code: " + str(response.status_code)
+
 
 
      
 
-def collect_data(_url, _pagination_count):
+def collect_data_in_page(_url, _pagination_count):
+    _data_out = []
     for page_count in range(1, _pagination_count): 
-        get_page_csr(url=_url+str(page_count))    
-    
-    return STAT
+        _page_data = get_page_csr(url=_url+str(page_count))
+        _data_out.extend( _page_data )        
+        
+        if("No response!" in _page_data):
+            print(_page_data)   #LOG
+            return telegram_bot_sendtext(_page_data)
+    print(str(GetSysytemTime()), " -- Total products: ", len(_data_out)) #LOG
+    return _data_out
 
-def find_wishes(wishes, products):
+def find_wishes(wishes, products):  
     _foundList = []
     for element in wishes:
         #print ("Search: " ,element)
@@ -92,7 +109,7 @@ def find_wishes(wishes, products):
                     if( size == element['Size']):
                         #print("Find!", product)
                         _foundList.append(product)
-        
+
     return _foundList
 
 def result_to_msg(result):
@@ -107,36 +124,40 @@ def result_to_msg(result):
                 info += 'Price Discount:  ' + el["PriceDiscount"] + "🔥🔥🔥" + '\n'
 
             info += di.UP_url + el['id']
-            _msg.append(info)
-            #return card
-            #telegram_bot_sendtext(card)        
+            _msg.append(info)  
     else:
         _msg.append("Wishes not found in products!")
     return _msg
 
 
 def telegram_bot_sendtext(bot_message):
-    print( GetSysytemTime(), " Send msg from bot: ", bot_message.replace('\n','') )  
+    print( str(GetSysytemTime()), " Send msg from bot: ", bot_message.replace('\n','') ) #LOG 
     send_text = 'https://api.telegram.org/bot' + di.TOKEN + '/sendMessage?chat_id=' + di.bot_chatID + '&parse_mode=Markdown&text=' + bot_message
     response = requests.get(send_text)
     return response.json()
 
 
-def report():
-    
-    UP_data = collect_data(di.UP_url_parks, di.UP_pagination_count)
+def report():    
+    UP_data = collect_data_in_page(di.UP_url_parks, di.UP_pagination_count)
     UP_result = find_wishes(di.UP_wishes, UP_data)
-    UP_massenges = result_to_msg(UP_result)
 
-    for text in UP_massenges:  
-        telegram_bot_sendtext(text)
+    if(UP_result):
+        UP_massenges = result_to_msg(UP_result)
+        for text in UP_massenges:  
+            telegram_bot_sendtext(text)
+    else:      
+        print(str(GetSysytemTime()), " Nothing founded in products!") #LOG
+        telegram_bot_sendtext("Nothing founded in UP products!\n Looking for:\n" + str(di.UP_wishes))
+
+            
 
 
 
 def main():
-    print( GetSysytemTime(), "  Server start")
+    print( GetSysytemTime(), " :: Server start ::")
     ####
-    threading.Thread(target=lambda: every(18000, report)).start()
+    timeDelay = 21600 #6h
+    threading.Thread(target=lambda: every(timeDelay, report)).start()
     bot_slave.main()
     ###
 

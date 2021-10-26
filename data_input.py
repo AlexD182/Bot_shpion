@@ -18,6 +18,6 @@ headers = {
 
 UP_url = "https://urbanplanet-streetwear.com"
 UP_url_parks = "https://urbanplanet-streetwear.com/mens-parks-jackets-bombers/c004/page-"
-UP_pagination_count = 2  
-UP_wishes =[{'id':'bomber-long-nvy', 'Size':'XS'},
-            {'id':'arka-urban-planet-softech-blk','Size':'L'}]
+UP_pagination_count = 3  
+UP_wishes =[{'id':'bomber-long-nvy', 'Size':'S'},
+            {'id':'bomber-long-nvy', 'Size':'XL'}]

@@ -7,18 +7,20 @@ from aiogram.dispatcher.filters import Text
 #import nest_asyncio
 
 import asyncio
-asyncio.set_event_loop(asyncio.new_event_loop())
+### works 25.10
+#asyncio.set_event_loop(asyncio.new_event_loop())
+loop = asyncio.new_event_loop()
+asyncio.set_event_loop(loop)
 
 
 
-from main import collect_data, find_wishes, GetSysytemTime, result_to_msg
+from main import collect_data_in_page, find_wishes, GetSysytemTime, result_to_msg
 import data_input as di
-
-
 
 
 bot = Bot(token = di.TOKEN, parse_mode = types.ParseMode.HTML)
 dp = Dispatcher(bot)
+
 
 ###   Start
 @dp.message_handler(commands="start")
@@ -32,19 +34,36 @@ async def start(message: types.Message):
 ###   UP store 
 @dp.message_handler(Text(equals="UP"))
 async def get_UP_data(message: types.Message):
+    print( str(GetSysytemTime()), "[bot] :: UP button pressed!") #LOG 
     await message.answer("Please waiting...")
 
-    UP_dataBot = collect_data(di.UP_url_parks, di.UP_pagination_count)
-    UP_resultBot = find_wishes(di.UP_wishes, UP_dataBot)       
-    UP_massengesBot = result_to_msg(UP_resultBot)
+    UP_dataBot = collect_data_in_page(di.UP_url_parks, di.UP_pagination_count)
+    UP_resultBot = find_wishes(di.UP_wishes, UP_dataBot) 
 
-    for text in UP_massengesBot:
-        await message.answer(text)
+    if(UP_resultBot):
+        UP_massengesBot = result_to_msg(UP_resultBot)
+        for text in UP_massengesBot:
+            await message.answer(text)    
+    else:              
+        await message.answer("Nothing founded in products!")
+
+
+
+
+
+###   STAFF store 
+@dp.message_handler(Text(equals="Staff"))
+async def my_func(message: types.Message):
+    print( str(GetSysytemTime()), "[bot] :: Staff button pressed!") #LOG 
+    await bot.send_message( message.chat.id, 'hi there')
+
+
 
 
 ###   PING time    
 @dp.message_handler(Text(equals="Ping"))
 async def get_ping(message: types.Message):
+    print( str(GetSysytemTime()), "[bot] :: Ping button pressed!") #LOG 
     _curTime = str(GetSysytemTime())
     _chat_id = "Chat id: " + str( message.chat.id)
     await message.answer(_curTime)
@@ -52,21 +71,11 @@ async def get_ping(message: types.Message):
 
 
 
-
-@dp.message_handler(Text(equals="Staff"))
-async def my_func(message: types.Message):
-    await bot.send_message( message.chat.id, 'hi there')
-
-
-
-
 def main():
-    #nest_asyncio.apply()
-    
-    print(GetSysytemTime(), "   Bot start")
+    #nest_asyncio.apply()    
+    print(GetSysytemTime(), " -=Bot start=-") #LOG
     executor.start_polling(dp, skip_updates = True)
     
-
     
 if __name__ == "__main__":
     main()
