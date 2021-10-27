@@ -74,7 +74,7 @@ async def get_ping(message: types.Message):
 def main():
     #nest_asyncio.apply()    
     print(GetSysytemTime(), " -=Bot start=-") #LOG
-    executor.start_polling(dp, skip_updates = True)
+    executor.start_polling(dp, skip_updates = True, loop=loop)
     
     
 if __name__ == "__main__":
