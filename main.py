@@ -155,11 +155,13 @@ def report():
 
 def main():
     print( GetSysytemTime(), " :: Server start ::")
-    ####
+    
     timeDelay = 21600 #6h
     threading.Thread(target=lambda: every(15, report)).start()
+
+    #Start bot
     bot_slave.main()
-    ###
+    
 
        
 
