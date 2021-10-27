@@ -72,15 +72,15 @@ async def get_ping(message: types.Message):
 
 def main():
     
-    #loop = asyncio.new_event_loop()
-    #asyncio.set_event_loop(loop)
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
     
 
     #nest_asyncio.apply()
     #get_or_create_eventloop()
          
     print(GetSysytemTime(), " -=Bot start=-") #LOG
-    executor.start_polling(dp, skip_updates = True)
+    executor.start_polling(dp, skip_updates = True, loop = loop)
     
 
     
