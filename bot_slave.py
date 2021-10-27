@@ -80,7 +80,7 @@ def main():
     #get_or_create_eventloop()
          
     print(GetSysytemTime(), " -=Bot start=-") #LOG
-    executor.start_polling(dp, skip_updates = True, loop = loop)
+    executor.start_polling(dp, skip_updates = True)
     
 
     
