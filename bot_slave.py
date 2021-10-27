@@ -9,8 +9,7 @@ from aiogram.dispatcher.filters import Text
 import asyncio
 ### works 25.10
 #asyncio.set_event_loop(asyncio.new_event_loop())
-loop = asyncio.new_event_loop()
-asyncio.set_event_loop(loop)
+
 
 
 
@@ -72,6 +71,9 @@ async def get_ping(message: types.Message):
 
 
 def main():
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    
     #nest_asyncio.apply()    
     print(GetSysytemTime(), " -=Bot start=-") #LOG
     executor.start_polling(dp, skip_updates = True, loop=loop)
