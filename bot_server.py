@@ -9,7 +9,8 @@ import threading
 
 
 ###
-from bot_slave import BotRun
+#from bot_slave import BotRun
+import bot_slave
 import data_input as di
 
 
@@ -28,7 +29,7 @@ def find_between( s, first, last ):
     except ValueError:
         return ""
 
-
+##################################
 
 
 
@@ -98,6 +99,8 @@ def collect_data_in_page(_url, _pagination_count):
     print(str(GetSysytemTime()), " -- Total products: ", len(_data_out)) #LOG
     return _data_out
 
+
+
 def find_wishes(wishes, products):  
     _foundList = []
     for element in wishes:
@@ -111,6 +114,8 @@ def find_wishes(wishes, products):
                         _foundList.append(product)
 
     return _foundList
+
+
 
 def result_to_msg(result):
     _msg =[]
