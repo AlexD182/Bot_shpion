@@ -164,10 +164,10 @@ def main():
     
     #timeDelay = 21600 #6h
     timeDelay = 36000 #10h
-    threading.Thread(target=lambda: every(20, report)).start()
+    threading.Thread(target=lambda: every(timeDelay, report)).start()
 
     #Start bot
-    #BotRun()
+    bot_slave.BotRun()
     
 
        
