@@ -68,8 +68,7 @@ async def get_ping(message: types.Message):
 
 
 
-def BotRun():
-    
+def BotRun():    
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
     
