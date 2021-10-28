@@ -9,7 +9,7 @@ import threading
 
 
 ###
-import bot_slave
+#import bot_slave
 import data_input as di
 
 
@@ -162,7 +162,7 @@ def main():
     threading.Thread(target=lambda: every(timeDelay, report)).start()
 
     #Start bot
-    bot_slave.main()
+    bot_slave.BotRun()
     
 
        

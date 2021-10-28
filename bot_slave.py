@@ -11,9 +11,7 @@ import asyncio
 #asyncio.set_event_loop(asyncio.new_event_loop())
 
 
-
-
-from main import collect_data_in_page, find_wishes, GetSysytemTime, result_to_msg
+from bot_server import collect_data_in_page, find_wishes, GetSysytemTime, result_to_msg
 import data_input as di
 
 
@@ -70,7 +68,7 @@ async def get_ping(message: types.Message):
 
 
 
-def main():
+def BotRun():
     
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
@@ -79,7 +77,7 @@ def main():
     #nest_asyncio.apply()
     #get_or_create_eventloop()
          
-    print(GetSysytemTime(), " -=Bot start=-") #LOG
+    #print(GetSysytemTime(), " -=Bot start=-") #LOG
     executor.start_polling(dp, skip_updates = True)
     
 
@@ -87,4 +85,4 @@ def main():
     
     
 if __name__ == "__main__":
-    main()
+    BotRun()
