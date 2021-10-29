@@ -4,6 +4,7 @@ from bs4 import BeautifulSoup as BS
 import datetime
 from DelayFunc import every
 import threading
+import streamlit as st
 
 
 
@@ -14,7 +15,7 @@ import bot_slave
 import data_input as di
 
 
-
+log = st.empty()
 ##    TOOLS
 #-------------------------------------------------------------------- 
 def GetSysytemTime():
@@ -94,6 +95,7 @@ def collect_data_in_page(_url, _pagination_count):
         _data_out.extend( _page_data )        
         
         if("No response!" in _page_data):
+            
             print(_page_data)   #LOG
             return telegram_bot_sendtext(_page_data)
     print(str(GetSysytemTime()), " -- Total products: ", len(_data_out)) #LOG
@@ -136,6 +138,7 @@ def result_to_msg(result):
 
 
 def telegram_bot_sendtext(bot_message):
+    st.write( " Send msg from bot: ")
     print( str(GetSysytemTime()), " Send msg from bot: ", bot_message.replace('\n','') ) #LOG 
     send_text = 'https://api.telegram.org/bot' + di.TOKEN + '/sendMessage?chat_id=' + di.bot_chatID + '&parse_mode=Markdown&text=' + bot_message
     response = requests.get(send_text)
@@ -159,15 +162,17 @@ def report():
 
 
 def main():
+    st.header( " == Server Bot ==")
+    st.text(GetSysytemTime() + " :: Server start ::")
     print( GetSysytemTime(), " :: Server start ::")
     
     
     #timeDelay = 21600 #6h
     timeDelay = 36000 #10h
-    threading.Thread(target=lambda: every(timeDelay, report)).start()
+    threading.Thread(target=lambda: every(20, report)).start()
 
     #Start bot
-    bot_slave.BotRun()
+    #bot_slave.BotRun()
     
 
        

@@ -1,6 +1,8 @@
 TOKEN = "2074405616:AAELmVVREYkoarofl6loqjljkvihA_VBP2E"
 bot_chatID = '439542902'
 
+#streamlit run bot_server.py
+
 
 headers = {
     "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
