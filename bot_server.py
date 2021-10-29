@@ -138,7 +138,6 @@ def result_to_msg(result):
 
 
 def telegram_bot_sendtext(bot_message):
-    st.write( " Send msg from bot: ")
     print( str(GetSysytemTime()), " Send msg from bot: ", bot_message.replace('\n','') ) #LOG 
     send_text = 'https://api.telegram.org/bot' + di.TOKEN + '/sendMessage?chat_id=' + di.bot_chatID + '&parse_mode=Markdown&text=' + bot_message
     response = requests.get(send_text)
@@ -169,10 +168,10 @@ def main():
     
     #timeDelay = 21600 #6h
     timeDelay = 36000 #10h
-    threading.Thread(target=lambda: every(20, report)).start()
+    threading.Thread(target=lambda: every(timeDelay, report)).start()
 
     #Start bot
-    #bot_slave.BotRun()
+    bot_slave.BotRun()
     
 
        
