@@ -2,3 +2,6 @@ bs4==0.0.1
 aiogram==2.15
 requests==2.25.1
 asyncio==3.4.3
+uvloop==0.16
+cchardet==2.1.7
+logging==0.4.9.6
